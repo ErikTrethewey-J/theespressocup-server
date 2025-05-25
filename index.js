@@ -23,12 +23,20 @@ app.post('/contact', async (req, res) => {
       },
     });
 
-    await transporter.sendMail({
-      from: email,
-      to: process.env.EMAIL_USER,
-      subject: `New message from ${name}`,
-      text: message,
-    });
+await transporter.sendMail({
+  from: `"${name}" <${email}>`,
+  to: process.env.EMAIL_USER,
+  subject: `New message from ${name} (${email})`,
+  text: `You've received a new message from The Espresso Cup contact form:
+
+Name: ${name}
+Email: ${email}
+
+Message:
+${message}
+`,
+});
+
 
     res.status(200).json({ message: 'Message sent successfully' });
   } catch (err) {
